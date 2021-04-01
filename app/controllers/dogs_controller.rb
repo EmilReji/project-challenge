@@ -1,5 +1,6 @@
 class DogsController < ApplicationController
-  before_action :set_dog, only: [:show, :edit, :update, :destroy]
+  before_action :set_dog, only: [:show, :edit, :update, :destroy, :like]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
 
   # GET /dogs
   # GET /dogs.json
@@ -80,8 +81,6 @@ class DogsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def dog_params
-      p "Session info:"
-      p current_user.id
       params.require(:dog).permit(:name, :description, :images)
     end
 
