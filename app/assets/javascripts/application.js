@@ -14,5 +14,7 @@
 //= require activestorage
 //= require turbolinks
 //= require_tree .
-
-console.log('Welcome!');
+$(document).ready(function () {
+  console.log('Welcome!');
+  $('section.photos').slick();
+});

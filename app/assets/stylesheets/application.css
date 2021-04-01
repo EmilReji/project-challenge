@@ -19,3 +19,12 @@ header {
   display: flex;
   justify-content: space-between;
 }
+
+.slick-prev:before, .slick-next:before {
+  color: #000000;
+}
+
+section.photos {
+  width: 80%;
+  margin: auto;
+}
