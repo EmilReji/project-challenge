@@ -19,12 +19,19 @@ class DogsController < ApplicationController
 
   # GET /dogs/1/edit
   def edit
+    if !valid_user?
+      respond_to do |format|
+        format.html { redirect_to @dog, notice: 'Dog can only be edited by creator.' }
+        format.json { render json: @dog.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   # POST /dogs
   # POST /dogs.json
   def create
     @dog = Dog.new(dog_params)
+    @dog.user = current_user
 
     respond_to do |format|
       if @dog.save
@@ -43,7 +50,7 @@ class DogsController < ApplicationController
   # PATCH/PUT /dogs/1.json
   def update
     respond_to do |format|
-      if @dog.update(dog_params)
+      if valid_user? && @dog.update(dog_params)
         @dog.images.attach(params[:dog][:image]) if params[:dog][:image].present?
 
         format.html { redirect_to @dog, notice: 'Dog was successfully updated.' }
@@ -73,6 +80,12 @@ class DogsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def dog_params
+      p "Session info:"
+      p current_user.id
       params.require(:dog).permit(:name, :description, :images)
+    end
+
+    def valid_user?
+      @dog.user == current_user
     end
 end
